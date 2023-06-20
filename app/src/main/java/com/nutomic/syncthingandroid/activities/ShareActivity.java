@@ -60,6 +60,55 @@ public class ShareActivity extends StateDialogActivity
     private Spinner mFoldersSpinner;
 
     @Override
+    protected void showDisabledDialog() {
+        if (this.isFinishing() && (mDisabledDialog != null)) {
+            return;
+        }
+        // TODO build a more advanced dialog that includes the settings checkmark
+        mDisabledDialog = Util.getAlertDialogBuilder(this)
+                .setTitle(R.string.syncthing_disabled_title)
+                .setMessage(getDisabledDialogMessage())
+                .setPositiveButton(R.string.syncthing_disabled_save_while_disabled,
+                        (dialogInterface, i) -> {
+                            // Allow to proceed to the page
+                            this.dismissDisabledDialog();
+                        }
+                )
+                .setNeutralButton(R.string.syncthing_disabled_change_settings,
+                        (dialogInterface, i) -> {
+                            Intent intent = new Intent(this, SettingsActivity.class);
+                            intent.putExtra(SettingsActivity.EXTRA_OPEN_SUB_PREF_SCREEN, "category_run_conditions");
+                            startActivity(intent);
+                        }
+                )
+                .setNegativeButton(R.string.exit,
+                        (dialogInterface, i) -> ActivityCompat.finishAffinity(this)
+                )
+                .setCancelable(false)
+                .show();
+    }
+
+    @NonNull
+    private StringBuilder getDisabledDialogMessage() {
+        StringBuilder message = new StringBuilder();
+        Collection<BlockerReason> reasons = getService().getCurrentRunConditionCheckResult().getBlockReasons();
+        if (!reasons.isEmpty()) {
+            message.append(this.getResources().getString(R.string.syncthing_disabled_reason_heading));
+            int count = 0;
+            for (BlockerReason reason : reasons) {
+                count++;
+                message.append("\n");
+                if (reasons.size() > 1) message.append(count + ". ");
+                message.append(this.getString(reason.getResId()));
+            }
+            message.append("\n");
+            message.append("\n");
+        }
+        message.append(this.getResources().getString(R.string.syncthing_disabled_message_files_not_synced));
+        return message;
+    }
+
+    @Override
     public void onServiceStateChange(SyncthingService.State currentState) {
         if (currentState != SyncthingService.State.ACTIVE || getApi() == null)
             return;

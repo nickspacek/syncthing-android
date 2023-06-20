@@ -103,7 +103,7 @@ public abstract class StateDialogActivity extends SyncthingActivity {
         }
     }
 
-    private void showDisabledDialog() {
+    protected void showDisabledDialog() {
         if (this.isFinishing() && (mDisabledDialog != null)) {
             return;
         }
@@ -145,7 +145,7 @@ public abstract class StateDialogActivity extends SyncthingActivity {
         return message;
     }
 
-    private void dismissDisabledDialog() {
+    protected void dismissDisabledDialog() {
         Util.dismissDialogSafe(mDisabledDialog, this);
         mDisabledDialog = null;
     }

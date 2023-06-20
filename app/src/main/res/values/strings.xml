@@ -666,6 +666,12 @@ Please report any problems you encounter via Github.</string>
     <!-- Message of the "syncthing disabled" dialog -->
     <string name="syncthing_disabled_message">Do you want to change the run conditions?</string>
 
+    <!-- Message of the "syncthing disabled" dialog during share -->
+    <string name="syncthing_disabled_message_files_not_synced">Files saved now will not be synchronized until Syncthing is enabled.</string>
+
+    <!-- Button text on the "syncthing disabled" dialog to save the file while service is disabled -->
+    <string name="syncthing_disabled_save_while_disabled">Save Anyway</string>
+
     <!-- Button text on the "syncthing disabled" dialog -->
     <string name="syncthing_disabled_change_settings">Change Settings</string>
 
